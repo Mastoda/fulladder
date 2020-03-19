@@ -1,0 +1,189 @@
+FULLADDER
+
+.include newlib.lib
+
+* source to turn on transistor
+*************************************************************************************************
+v1		vdd		0	1.8
+*************************************************************************************************
+* pulse(vlow,vhigh,delayini,timerise,timefall,timehigh,period)
+* source for inputs
+*************************************************************************************************
+* input A
+vain	ain		0	pulse(0, 1.8, 0, 0, 0, 40u, 80u)
+* input B
+vbin	bin		0	pulse(0, 1.8, 0, 0, 0, 20u, 40u)
+* input Te/C
+vcin	cin		0	pulse(0, 1.8, 0, 0, 0, 10u, 20u)
+* input clk
+vcl1	cl1		0	pulse(0, 1.8, 100n, 0, 0, 500n, 1000n)
+vcl2	cl2		0	pulse(0, 1.8, 300n, 0, 0, 500n, 1000n)
+vcl3	cl3		0	pulse(0, 1.8, 400n, 0, 0, 500n, 1000n)
+*************************************************************************************************
+* OR
+*************************************************************************************************
+*va		ain		0	0
+*vb		bin		0	1.8
+*vc		cin		0	1.8
+*************************************************************************************************
+* FULLADDER Transistors construction
+*************************************************************************************************
+m1a		srcA1	ain	vdd		vdd		PMOS L=0.18u W=2.16u AD=1.07p AS=1.07p PD=3.15u PS=3.15u
+m1b		srcB1	bin	srcA1	srcA1	PMOS L=0.18u W=2.16u AD=1.07p AS=1.07p PD=3.15u PS=3.15u
+m2a		xin		ain	srcB1	srcB1	PMOS L=0.18u W=2.16u AD=1.07p AS=1.07p PD=3.15u PS=3.15u
+m2b		srcA1	bin	vdd		vdd		PMOS L=0.18u W=2.16u AD=1.07p AS=1.07p PD=3.15u PS=3.15u
+m1c		xin		cin	srcA1	srcA1	PMOS L=0.18u W=1.44u AD=0.713p AS=0.713p PD=2.43u PS=2.43u
+m2c		xin		cin	srcC2	srcC2	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+m3a		srcC2	ain	0		0		NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+m3b		srcC2	bin	0		0		NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+m4a		xin		ain	srcA3	srcA3	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+m4b		srcA3	bin	0		0		NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+m1x		cO		xin	vdd		vdd		PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+m2x		cO		xin	0		0		NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+m3c		srcC3	cin	vdd		vdd		PMOS L=0.18u W=2.88u AD=1.4256p AS=1.4256p PD=3.87u PS=3.87u
+m5a		srcC3	ain	vdd		vdd		PMOS L=0.18u W=2.88u AD=1.4256p AS=1.4256p PD=3.87u PS=3.87u
+m5b		srcC3	bin	vdd		vdd		PMOS L=0.18u W=2.88u AD=1.4256p AS=1.4256p PD=3.87u PS=3.87u
+m3x		yin		xin	srcC3	srcC3	PMOS L=0.18u W=1.44u AD=0.713p AS=0.713p PD=2.43u PS=2.43u
+m6a		srcA6	ain	srcC3	srcC3	PMOS L=0.18u W=2.88u AD=1.4256p AS=1.4256p PD=3.87u PS=3.87u
+m6b		srcB6	bin	srcA6	srcA6	PMOS L=0.18u W=2.88u AD=1.4256p AS=1.4256p PD=3.87u PS=3.87u
+m4c		yin		cin	srcB6	srcB6	PMOS L=0.18u W=2.88u AD=1.4256p AS=1.4256p PD=3.87u PS=3.87u
+m4x		yin		xin	srcX4	srcX4	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+m7a		srcX4	ain	0		0		NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+m7b		srcX4	bin	0		0		NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+m5c		srcX4	cin	0		0		NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+m6c		yin		cin	srcC6	srcC6	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+m8a		srcC6	ain	srcA8	srcA8	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+m8b		srcA8	bin	0		0		NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+m1y		sum		yin	vdd		vdd		PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+m2y		sum		yin	0		0		NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+*************************************************************************************************
+* iexp for insert a failure
+*************************************************************************************************
+*iset 	xin 	0 	exp(0, -800u, 1n, 10p, 2n, 290p)
+*iset 	xin 	0 	exp(0, -800u, 42000n, 10p, 42300n, 290p)
+*iset2 	out 	0 	exp(0, -135u, 48u, 10p, 48.1u, 320p)
+*iset3 	out 	0 	exp(0, 800u, 58u, 10p, 58.1u, 400p)
+*************************************************************************************************
+* m[nome] drain gate source bulk [P|N]MOS parameters...
+* flipflops to receive SUM
+* first flipflop
+*************************************************************************************************
+ m37	drn11	gt11	vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m61	drn11	gt12	vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m62	drn11	gt11	src11	0 	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m35	src11	gt12	0		0 	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m72	gt12	drn11	vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m73	gt12	cl1		vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m74	gt12	drn11	src13	0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m71	src13	cl1		0		0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m68	q1		gt12	vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m69	q1		gt13	vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m70	q1		gt12	src14	0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m67	src14	gt13	0		0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m76	gt13	q1		vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m77	gt13	gt14	vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m78	gt13	q1		src15	0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m75	src15	gt14	0		0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m88	gt14	gt12	vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m91	gt14	cl1		vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m84	gt14	gt11	vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m90	gt14	gt12	src16	0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m86	src16	cl1		src17	0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m83	src17	gt11	0		0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m80	gt11	gt14	vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m81	gt11	sum		vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m82	gt11	gt14	src18	0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m79	src18	sum		0		0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+*************************************************************************************************
+* second flipflop
+*************************************************************************************************
+ m01	drn21	gt21	vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m02	drn21	gt22	vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m03	drn21	gt21	src21	0 	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m04	src21	gt22	0		0 	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m05	gt22	drn21	vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m06	gt22	cl2		vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m07	gt22	drn21	src23	0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m08	src23	cl2		0		0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m09	q2		gt22	vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m10	q2		gt23	vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m11	q2		gt22	src24	0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m12	src24	gt23	0		0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m13	gt23	q2		vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m14	gt23	gt24	vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m15	gt23	q2		src25	0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m16	src25	gt24	0		0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m17	gt24	gt22	vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m18	gt24	cl2		vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m19	gt24	gt21	vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m20	gt24	gt22	src26	0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m21	src26	cl2		src27	0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m22	src27	gt21	0		0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m23	gt21	gt24	vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m24	gt21	sum		vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m25	gt21	gt24	src28	0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m26	src28	sum		0		0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+*************************************************************************************************
+* third flipflop
+*************************************************************************************************
+ m27	drn31	gt31	vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m28	drn31	gt32	vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m29	drn31	gt31	src31	0 	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m30	src31	gt32	0		0 	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m31	gt32	drn31	vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m32	gt32	cl3		vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m33	gt32	drn31	src33	0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m34	src33	cl3		0		0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m99	q3		gt32	vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m36	q3		gt33	vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m38	q3		gt32	src34	0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m39	src34	gt33	0		0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m40	gt33	q3		vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m41	gt33	gt34	vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m42	gt33	q3		src35	0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m43	src35	gt34	0		0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m44	gt34	gt32	vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m45	gt34	cl3		vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m46	gt34	gt31	vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m47	gt34	gt32	src36	0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m48	src36	cl3		src37	0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m49	src37	gt31	0		0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m60	gt31	gt34	vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m63	gt31	sum		vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m64	gt31	gt34	src38	0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m65	src38	sum		0		0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+*************************************************************************************************
+* voter
+*************************************************************************************************
+ m151	drn41	q1		vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m152	drn41	q3		vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m153	drn41	q1		src41	0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m150	src41	q3		0		0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m155	drn42	q2		vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m156	drn42	q1		vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m157	drn42	q2		src42	0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m154	src42	q1		0		0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m159	drn43	q3		vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m160	drn43	q2		vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m161	drn43	q3		src43	0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m158	src43	q2		0		0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m147	out		drn41	vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m149	out		drn42	vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m145	out		drn43	vdd		vdd	PMOS L=0.18u W=0.72u AD=0.356p AS=0.356p PD=1.71u PS=1.71u
+ m148	out		drn41	src44	0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m146	src44	drn42	src45	0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+ m144	src45	drn43	0		0	NMOS L=0.18u W=0.18u AD=0.0891n AS=0.0891n PD=1.17u PS=1.17u
+*************************************************************************************************
+.end
+.control
+*************************************************************************************************
+* tran <step> <total>
+*************************************************************************************************
+*tran 1p 15n
+tran 10n 100u
+setplot
+*plot v(sum) v(gt11)+2 v(gt12)+4 v(gt13)+6 v(gt14)+8 v(q1)+10 v(out)+12 v(clk)+14
+*plot v(cl1)+14 v(cl2)+12 v(cl3)+10 v(ain)+8 v(bin)+6 v(cin)+4 v(sum)+2 v(out) v(q1)-2 v(q2)-4 v(q3)-6 v(xin)-10
+*plot v(xin) v(srcA3)+2 v(sum)+4 v(out)+6
+
+plot v(ain)+8 v(bin)+6 v(cin)+4 v(sum)+2 v(out)
